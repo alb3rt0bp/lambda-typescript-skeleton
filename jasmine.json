@@ -1,0 +1,28 @@
+{
+  "spec_dir": "tests/unit",
+  "spec_files": [
+    "**/*.spec.ts"
+  ],
+  "helpers": [
+    "jasmine_helpers/*.ts"
+  ],
+  "errorOnFail": true,
+  "includeStackTrace": false,
+  "reporters": [
+    {
+      "name": "jasmine-terminal-reporter",
+      "options": {
+        "isVerbose": false,
+        "showColors": true,
+        "includeStackTrace": true
+      }
+    },
+    {
+      "name": "jasmine-reporters#JUnitXmlReporter",
+      "options": {
+        "savePath": "./tests/reports/unit",
+        "consolidateAll": true
+      }
+    }
+  ]
+}

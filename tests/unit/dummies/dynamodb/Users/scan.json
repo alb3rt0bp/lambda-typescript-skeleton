@@ -1,0 +1,66 @@
+{
+  "Count": 3,
+  "Items": [
+    {
+      "id": {
+        "S": "246d480b-75c4-4220-8ec0-29f69704f61d"
+      },
+      "given_name": {
+        "S": "Silene"
+      },
+      "family_name": {
+        "S": "Oliveira"
+      },
+      "email": {
+        "S": "silene.oliveira@example.com"
+      },
+      "birthdate": {
+        "S": "1980-01-01"
+      },
+      "phone_number": {
+        "S": "+34612345789"
+      }
+    },
+    {
+      "id": {
+        "S": "246d480b-75c4-4220-8ec0-29f69704f61d"
+      },
+      "given_name": {
+        "S": "Andrés"
+      },
+      "family_name": {
+        "S": "De Fonollosa"
+      },
+      "email": {
+        "S": "andres.defonollosa@example.com"
+      },
+      "birthdate": {
+        "S": "1971-01-01"
+      },
+      "phone_number": {
+        "S": "+34612345789"
+      }
+    },
+    {
+      "id": {
+        "S": "246d480b-75c4-4220-8ec0-29f69704f61d"
+      },
+      "given_name": {
+        "S": "Ágata"
+      },
+      "family_name": {
+        "S": "Jiménez"
+      },
+      "email": {
+        "S": "agata.jimenez@example.com"
+      },
+      "birthdate": {
+        "S": "1981-01-01"
+      },
+      "phone_number": {
+        "S": "+34612345789"
+      }
+    }
+  ],
+  "ScannedCount": 3
+}

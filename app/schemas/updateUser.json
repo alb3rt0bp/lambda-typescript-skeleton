@@ -1,0 +1,43 @@
+{
+  "type": "object",
+  "properties": {
+    "body": {
+      "type": "object",
+      "properties": {
+        "given_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "family_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "birthdate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 10,
+          "format": "date"
+        },
+        "email": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 75,
+          "format": "email"
+        },
+        "phone_number": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 12
+        }
+      }
+    }
+  }
+}

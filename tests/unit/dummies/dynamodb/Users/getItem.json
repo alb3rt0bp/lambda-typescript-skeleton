@@ -1,0 +1,22 @@
+{
+  "Item": {
+    "id": {
+      "S": "246d480b-75c4-4220-8ec0-29f69704f61d"
+    },
+    "given_name": {
+      "S": "Silene"
+    },
+    "family_name": {
+      "S": "Oliveira"
+    },
+    "email": {
+      "S": "silene.oliveira@example.com"
+    },
+    "birthdate": {
+      "S": "1980-01-01"
+    },
+    "phone_number": {
+      "S": "+34612345789"
+    }
+  }
+}

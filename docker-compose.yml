@@ -1,0 +1,30 @@
+sonar-database:
+  image: postgres:13.0-alpine
+  container_name: sonar-database
+  ports:
+    - "5432:5432"
+  environment:
+    - POSTGRES_USER=sonarqube
+    - POSTGRES_DB=sonardb
+    - POSTGRES_PASSWORD=naethu5Zeiw2ieSo
+  volumes:
+    - "/usr/local/docker-storage/sonar-database-postgre:/var/lib/postgresql/data:rw"
+
+sonar:
+  container_name: sonar
+  image: sonarqube:8.4-community
+  # user: admin
+  # password: admin
+  # install SonarJS and SonarTS from marketplace
+  links:
+    - sonar-database
+  ports:
+    - "19000:9000"
+  volumes:
+    - /usr/local/docker-storage/sonarqube/conf:/opt/sonarqube/conf:rw
+    - /usr/local/docker-storage/sonarqube/data:/opt/sonarqube/data:rw
+    - /usr/local/docker-storage/sonarqube/extensions:/opt/sonarqube/extensions:rw
+  environment:
+    SONARQUBE_JDBC_PASSWORD: "naethu5Zeiw2ieSo"
+    SONARQUBE_JDBC_URL: "jdbc:postgresql://sonar-database/sonardb?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance"
+    SONARQUBE_JDBC_USERNAME: "sonarqube"

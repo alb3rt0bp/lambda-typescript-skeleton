@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "watch": true,
+        "outDir": "dist",
+        "rootDirs": ["./app", "./config", "./utils"],
+        "allowJs": true,
+        "lib": ["es2015","dom"],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true
+    },
+    "exclude": [
+        "tests",
+        "dist",
+        "gulpfile.ts"
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "name": "ts:skeleton",
+    "logLevel": "debug",
+    "environment": "local",
+    "aws": {
+        "region": "eu-west-1",
+        "dynamodb": {
+            "tableName": "dynamo_test_ts_skeleton"
+        }
+    }
+}
