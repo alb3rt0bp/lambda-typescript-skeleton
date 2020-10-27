@@ -1,6 +1,6 @@
 'use strict';
 import * as component from '../../../index';
-import * as controller from '../../../app/controller';
+import Controller from '../../../app/Controller';
 import * as AWSLambda from 'aws-lambda'
 import {LogData} from '../../../utils/log/classes/LogData';
 
@@ -165,7 +165,7 @@ describe('Index tests and input validations for userDetail service', () => {
 
     it('OK', async (done) => {
         /*When spying a class use class.Prototype. For instance:
-             controller:
+             Controller:
              const plaid = require('plaid');
              const plaid = new Plaid.Client()
 
@@ -173,7 +173,7 @@ describe('Index tests and input validations for userDetail service', () => {
              const plaid = require('plaid');
              spyOn(plaid.Client.prototype, 'createLinkToken').and.callFake.....
          */
-        spyOn(controller, 'userDetail').and.callFake((event:AWSLambda.APIGatewayEvent, logData:LogData) => {
+        spyOn(Controller, 'userDetail').and.callFake((event:AWSLambda.APIGatewayEvent, logData:LogData) => {
             return Promise.resolve({
                 statusCode: 200,
                 body: '{"description":"OK.","internal_code":"GMB-0005"}'
@@ -188,7 +188,7 @@ describe('Index tests and input validations for userDetail service', () => {
                     'Access-Control-Allow-Origin': '*'
                 }
             });
-            expect(controller.userDetail).toHaveBeenCalled();
+            expect(Controller.userDetail).toHaveBeenCalled();
             done();
         }
         catch(error) {

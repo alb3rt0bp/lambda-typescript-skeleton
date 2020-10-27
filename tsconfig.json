@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "ES2020",
         "watch": false,
         "outFile": "dist/bundle.js",
         "rootDirs": ["./app", "./config", "./utils"],

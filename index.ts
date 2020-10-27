@@ -1,6 +1,6 @@
 'use strict'
 
-import * as controller from './app/controller'
+import Controller from './app/Controller'
 import middy from "@middy/core"
 import {
     schemaValidationErrorParser
@@ -20,7 +20,7 @@ const createUser = middy((event:AWSLambda.APIGatewayEvent, context:AWSLambda.Con
             path: event.path,
             from: event.headers["X-Forwarded-For"][0]
         })
-        return controller.createUser(event, logData)
+        return Controller.createUser(event, logData)
     })
     .use(jsonBodyParser()) // parses the request body when it's a JSON and converts it to an object
     .use(validator({inputSchema: createUserSchema, ajvOptions: {$data: true}})) // validates the input
@@ -36,7 +36,7 @@ const listUsers = middy((event:AWSLambda.APIGatewayEvent, context:AWSLambda.Cont
         path: event.path,
         from: event.headers["X-Forwarded-For"][0]
     })
-    return controller.listUsers(event, logData)
+    return Controller.listUsers(event, logData)
 })
     .use(jsonBodyParser()) // parses the request body when it's a JSON and converts it to an object
     .use(httpErrorHandler({
@@ -50,7 +50,7 @@ const userDetail = middy((event:AWSLambda.APIGatewayEvent, context:AWSLambda.Con
         path: event.path,
         from: event.headers["X-Forwarded-For"][0]
     })
-    return controller.userDetail(event, logData)
+    return Controller.userDetail(event, logData)
 })
     .use(jsonBodyParser()) // parses the request body when it's a JSON and converts it to an object
     .use(validator({inputSchema: userDetailSchema, ajvOptions: {$data: true}})) // validates the input
@@ -66,7 +66,7 @@ const deleteUser = middy((event:AWSLambda.APIGatewayEvent, context:AWSLambda.Con
         path: event.path,
         from: event.headers["X-Forwarded-For"][0]
     })
-    return controller.deleteUser(event, logData)
+    return Controller.deleteUser(event, logData)
 })
     .use(jsonBodyParser()) // parses the request body when it's a JSON and converts it to an object
     .use(validator({inputSchema: userDetailSchema, ajvOptions: {$data: true}})) // validates the input
@@ -85,7 +85,7 @@ const updateUser = middy((event:AWSLambda.APIGatewayEvent, context:AWSLambda.Con
         path: event.path,
         from: event.headers["X-Forwarded-For"][0]
     })
-    return controller.updateUser(event, logData)
+    return Controller.updateUser(event, logData)
 })
     .use(jsonBodyParser()) // parses the request body when it's a JSON and converts it to an object
     .use(validator({inputSchema: updateUserSchema, ajvOptions: {$data: true}})) // validates the input

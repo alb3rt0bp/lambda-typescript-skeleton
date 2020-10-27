@@ -4,8 +4,8 @@ scanner(
     {
         serverUrl : "http://localhost:19000",
         options: {
-            "sonar.projectKey": "sonar:covault-tpw-lambda-idconnect",
-            "sonar.projectName": " covault-cin-tpw-lambda-idconnect",
+            "sonar.projectKey": "sonar:ts-lambda-skeleton",
+            "sonar.projectName": " ts-lambda-skeleton",
             "sonar.projectVersion": "1.0.0",
             "sonar.sources": "./index.ts,./app/",
             "sonar.exclusions": "",

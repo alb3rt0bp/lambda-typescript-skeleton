@@ -1,12 +1,12 @@
 'use strict';
-import {createUser} from "../../../../app/controller"
+import Controller from "../../../../app/Controller"
 import AWS, {AWSError} from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock';
 import Dynamodb from "aws-sdk/clients/dynamodb"
 import { config } from '../../../../config'
 import {LogData} from '../../../../utils/log/classes/LogData';
 
-describe('Controller tests for createUser service', () => {
+describe('Controller tests for Controller.createUser service', () => {
 
     let eventDummy: any
     let logData:LogData
@@ -66,7 +66,7 @@ describe('Controller tests for createUser service', () => {
         })
 
         try {
-            const result =  await createUser(eventDummy, logData)
+            const result =  await Controller.createUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 500,
@@ -100,7 +100,7 @@ describe('Controller tests for createUser service', () => {
             callback(null)
         })
         try {
-            const result =  await createUser(eventDummy, logData)
+            const result =  await Controller.createUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             const responseBody = JSON.parse(result.body)
             expect(result.statusCode).toBe(200)
@@ -143,7 +143,7 @@ describe('Controller tests for createUser service', () => {
             callback(null)
         })
         try {
-            const result =  await createUser(eventDummy, logData)
+            const result =  await Controller.createUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             const responseBody = JSON.parse(result.body)
             expect(result.statusCode).toBe(200)

@@ -1,6 +1,6 @@
 'use strict';
 import * as component from "../../../index";
-import * as controller from "../../../app/controller";
+import Controller from "../../../app/Controller";
 import * as AWSLambda from 'aws-lambda'
 import {LogData} from "../../../utils/log/classes/LogData";
 
@@ -33,7 +33,7 @@ describe('Index tests and input validations for createUser service', () => {
              const plaid = require('plaid');
              spyOn(plaid.Client.prototype, 'createLinkToken').and.callFake.....
          */
-        spyOn(controller, 'listUsers').and.callFake((event:AWSLambda.APIGatewayEvent, logData:LogData) => {
+        spyOn(Controller, 'listUsers').and.callFake((event:AWSLambda.APIGatewayEvent, logData:LogData) => {
             return Promise.resolve({
                 statusCode: 200,
                 body: JSON.stringify({
@@ -98,7 +98,7 @@ describe('Index tests and input validations for createUser service', () => {
                     'Access-Control-Allow-Origin': '*'
                 }
             });
-            expect(controller.listUsers).toHaveBeenCalled();
+            expect(Controller.listUsers).toHaveBeenCalled();
             done();
         }
         catch(error) {

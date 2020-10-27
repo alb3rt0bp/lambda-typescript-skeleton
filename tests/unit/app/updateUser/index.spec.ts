@@ -1,12 +1,12 @@
 'use strict';
-import { updateUser } from "../../../../app/controller"
+import Controller from "../../../../app/Controller"
 import AWS, {AWSError} from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock';
 import Dynamodb from "aws-sdk/clients/dynamodb"
 import { config } from '../../../../config'
 import {LogData} from '../../../../utils/log/classes/LogData';
 
-describe('Controller tests for updateUser service', () => {
+describe('Controller tests for Controller.updateUser service', () => {
 
     let eventDummy: any
     let logData:LogData
@@ -67,7 +67,7 @@ describe('Controller tests for updateUser service', () => {
         })
 
         try {
-            const result =  await updateUser(eventDummy, logData)
+            const result =  await Controller.updateUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 500,
@@ -98,7 +98,7 @@ describe('Controller tests for updateUser service', () => {
             callback(null, {})
         })
         try {
-            const result =  await updateUser(eventDummy, logData)
+            const result =  await Controller.updateUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 404,
@@ -167,7 +167,7 @@ describe('Controller tests for updateUser service', () => {
         })
 
         try {
-            const result =  await updateUser(eventDummy, logData)
+            const result =  await Controller.updateUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 500,
@@ -216,7 +216,7 @@ describe('Controller tests for updateUser service', () => {
             callback(null)
         })
         try {
-            const result =  await updateUser(eventDummy, logData)
+            const result =  await Controller.updateUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 200,
@@ -277,7 +277,7 @@ describe('Controller tests for updateUser service', () => {
             callback(null)
         })
         try {
-            const result =  await updateUser(eventDummy, logData)
+            const result =  await Controller.updateUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 200,
@@ -336,7 +336,7 @@ describe('Controller tests for updateUser service', () => {
             callback(null)
         })
         try {
-            const result =  await updateUser(eventDummy, logData)
+            const result =  await Controller.updateUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 200,
@@ -398,7 +398,7 @@ describe('Controller tests for updateUser service', () => {
             callback(null)
         })
         try {
-            const result =  await updateUser(eventDummy, logData)
+            const result =  await Controller.updateUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 200,

@@ -1,12 +1,12 @@
 'use strict';
-import { userDetail } from "../../../../app/controller"
+import Controller from "../../../../app/Controller"
 import AWS, {AWSError} from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock';
 import Dynamodb from "aws-sdk/clients/dynamodb"
 import { config } from '../../../../config'
 import {LogData} from '../../../../utils/log/classes/LogData';
 
-describe('Controller tests for userDetail service', () => {
+describe('Controller tests for Controller.userDetail service', () => {
 
     let eventDummy: any
     let logData:LogData
@@ -63,7 +63,7 @@ describe('Controller tests for userDetail service', () => {
         })
 
         try {
-            const result =  await userDetail(eventDummy, logData)
+            const result =  await Controller.userDetail(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 500,
@@ -94,7 +94,7 @@ describe('Controller tests for userDetail service', () => {
             callback(null, {})
         })
         try {
-            const result =  await userDetail(eventDummy, logData)
+            const result =  await Controller.userDetail(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 404,
@@ -127,7 +127,7 @@ describe('Controller tests for userDetail service', () => {
             callback(null, JSON.parse(JSON.stringify(require('../../dummies/dynamodb/Users/getItem.json'))))
         })
         try {
-            const result =  await userDetail(eventDummy, logData)
+            const result =  await Controller.userDetail(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 200,

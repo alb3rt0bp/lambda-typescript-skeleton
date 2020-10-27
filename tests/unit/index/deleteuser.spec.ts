@@ -1,6 +1,6 @@
 'use strict';
 import * as component from '../../../index';
-import * as controller from '../../../app/controller';
+import Controller from '../../../app/Controller';
 import * as AWSLambda from 'aws-lambda'
 import {LogData} from '../../../utils/log/classes/LogData';
 
@@ -173,12 +173,13 @@ describe('Index tests and input validations for deleteUser service', () => {
              const plaid = require('plaid');
              spyOn(plaid.Client.prototype, 'createLinkToken').and.callFake.....
          */
-        spyOn(controller, 'deleteUser').and.callFake((event:AWSLambda.APIGatewayEvent, logData:LogData) => {
+        spyOn(Controller, 'deleteUser').and.callFake((event:AWSLambda.APIGatewayEvent, logData:LogData) => {
             return Promise.resolve({
                 statusCode: 204,
                 body: ''
             })
         });
+
         try {
             const result =  await component.deleteUser(eventDummy, {} as AWSLambda.Context, null as unknown as AWSLambda.Callback);
             expect(result).toEqual({
@@ -188,7 +189,7 @@ describe('Index tests and input validations for deleteUser service', () => {
                     'Access-Control-Allow-Origin': '*'
                 }
             });
-            expect(controller.deleteUser).toHaveBeenCalled();
+            expect(Controller.deleteUser).toHaveBeenCalled();
             done();
         }
         catch(error) {

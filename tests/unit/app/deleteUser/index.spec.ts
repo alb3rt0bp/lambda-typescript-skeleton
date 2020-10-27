@@ -1,12 +1,12 @@
 'use strict';
-import { deleteUser } from "../../../../app/controller"
+import Controller from "../../../../app/Controller"
 import AWS, {AWSError} from 'aws-sdk'
 import AWSMock from 'aws-sdk-mock';
 import Dynamodb from "aws-sdk/clients/dynamodb"
 import { config } from '../../../../config'
 import {LogData} from '../../../../utils/log/classes/LogData';
 
-describe('Controller tests for deleteUser service', () => {
+describe('Controller tests for Controller.deleteUser service', () => {
 
     let eventDummy: any
     let logData:LogData
@@ -63,7 +63,7 @@ describe('Controller tests for deleteUser service', () => {
         })
 
         try {
-            const result =  await deleteUser(eventDummy, logData)
+            const result =  await Controller.deleteUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 500,
@@ -94,7 +94,7 @@ describe('Controller tests for deleteUser service', () => {
             callback(null, {})
         })
         try {
-            const result =  await deleteUser(eventDummy, logData)
+            const result =  await Controller.deleteUser(eventDummy, logData)
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 204,
