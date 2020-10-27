@@ -1,6 +1,6 @@
 import * as uuidGenerator from "uuid"
 
-export class User {
+export default class User {
     id: string
     given_name: string
     family_name: string

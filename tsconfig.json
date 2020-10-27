@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "target": "ES2020",
-        "watch": true,
-        "outDir": "dist",
+        "target": "es6",
+        "watch": false,
+        "outFile": "dist/bundle.js",
         "rootDirs": ["./app", "./config", "./utils"],
         "allowJs": true,
         "lib": ["es2015","dom"],
@@ -17,6 +17,7 @@
     "exclude": [
         "tests",
         "dist",
-        "gulpfile.ts"
+        "gulpfile.ts",
+        "node_modules"
     ]
 }
