@@ -51,7 +51,7 @@ export default class Controller {
 
             dynamodb.putItem(params, function(error:AWS.AWSError) {
                 if(error) {
-                    logger.error(logData, 'app.controller._insertOrUpdateDB: Error putting User in DynamoDB', {message: error.message, code: error.code, requestId: error.requestId});
+                    logger.error(logData, 'app.controller._insertOrUpdateDB: Error putting User in DynamoDB', {message: error.message, code: error.code, requestId: error.requestId})
                     const result = new CommonResponse(EnumResponses.GENERAL_ERROR)
                     result.setDescription(error.message)
                     return reject(result)
@@ -68,14 +68,14 @@ export default class Controller {
             const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10', region: config.aws.region})
             const params:AWS.DynamoDB.Types.ScanInput = {
                 TableName: config.aws.dynamodb.tableName
-            };
+            }
             dynamodb.scan(params, function (error: AWS.AWSError, data: AWS.DynamoDB.Types.ScanOutput) {
                 if (error) {
                     logger.error(logData, 'app.controller.binding: Error scanning Users in DynamoDB', {
                         message: error.message,
                         code: error.code,
                         requestId: error.requestId
-                    });
+                    })
                     const result = new CommonResponse(EnumResponses.GENERAL_ERROR)
                     result.setDescription(error.message)
                     return reject(result)
@@ -101,14 +101,14 @@ export default class Controller {
                     }
                 },
                 TableName: config.aws.dynamodb.tableName
-            };
+            }
             dynamodb.getItem(params, function (error: AWS.AWSError, dynamoItem: AWS.DynamoDB.Types.GetItemOutput) {
                 if (error) {
                     logger.error(logData, `app.controller._userDetail: Error getting User ${id}`, {
                         message: error.message,
                         code: error.code,
                         requestId: error.requestId
-                    });
+                    })
                     const result = new CommonResponse(EnumResponses.GENERAL_ERROR)
                     result.setDescription(error.message)
                     reject(result)
@@ -134,14 +134,14 @@ export default class Controller {
                     }
                 },
                 TableName: config.aws.dynamodb.tableName
-            };
+            }
             dynamodb.deleteItem(params, function (error: AWS.AWSError, dynamoItem: AWS.DynamoDB.Types.DeleteItemOutput) {
                 if (error) {
                     logger.error(logData, `app.controller._deleteUser: Error deleting User ${id}`, {
                         message: error.message,
                         code: error.code,
                         requestId: error.requestId
-                    });
+                    })
                     const result = new CommonResponse(EnumResponses.GENERAL_ERROR)
                     result.setDescription(error.message)
                     reject(result)
@@ -157,132 +157,141 @@ export default class Controller {
 //************************************************* EXPORTS **********************************************************//
 //********************************************************************************************************************//
 
-    public static createUser(event: AWSLambda.APIGatewayEvent, logData: LogData): Promise<AWSLambda.APIGatewayProxyResult> {
+    public static async createUser(event: AWSLambda.APIGatewayEvent, logData: LogData): Promise<AWSLambda.APIGatewayProxyResult> {
         const startTime = process.hrtime()
         logger.info(logData, 'app.controller.createUser: Request received')
         logger.debug(logData, 'app.controller.createUser: Body', event.body)
         const user = new User(event.body)
-        return this._insertOrUpdateDB(user, logData)
-            .then(() => {
-                const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
-                response.setData({
-                    id: user.id
-                })
 
-                const diffTime = process.hrtime(startTime);
-                const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6);
-                logger.info(logData,`app.controller.createUser: Finished in ${processedDiffTime} ms`, response.status_code);
-                logger.debug(logData,'app.controller.createUser', response);
+        try {
+            await this._insertOrUpdateDB(user, logData)
 
-                return Promise.resolve(response.toApiGatewayProxyResult())
+            const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
+            response.setData({
+                id: user.id
             })
-            .catch((error:CommonResponse) => {
-                logger.error(logData,`app.controller.createUser: Error`, error)
-                return Promise.resolve(error.toApiGatewayProxyResult())
-            })
+
+            const diffTime = process.hrtime(startTime)
+            const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
+            logger.info(logData, `app.controller.createUser: Finished in ${processedDiffTime} ms`, response.status_code)
+            logger.debug(logData, 'app.controller.createUser', response)
+
+            return Promise.resolve(response.toApiGatewayProxyResult())
+        }
+        catch(err:unknown) {
+            const error:CommonResponse = <CommonResponse> err
+            logger.error(logData,`app.controller.createUser: Error`, error)
+            return Promise.resolve(error.toApiGatewayProxyResult())
+        }
     }
 
-    public static listUsers(event: AWSLambda.APIGatewayEvent, logData: LogData): Promise<AWSLambda.APIGatewayProxyResult> {
+    public static async listUsers(event: AWSLambda.APIGatewayEvent, logData: LogData): Promise<AWSLambda.APIGatewayProxyResult> {
         const startTime = process.hrtime()
         logger.info(logData, 'app.controller.listUsers: Request received')
-        return this._listUsers(logData)
-            .then((users: User[]) => {
-                const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
-                response.setData(users)
+        try {
+            const users:User[] =  await this._listUsers(logData)
+            const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
+            response.setData(users)
 
-                const diffTime = process.hrtime(startTime);
-                const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6);
-                logger.info(logData,`app.controller.listUsers: Finished in ${processedDiffTime} ms`, response.status_code);
-                logger.debug(logData,'app.controller.listUsers', response);
-                return Promise.resolve(response.toApiGatewayProxyResult())
-            })
-            .catch((error:CommonResponse) => {
-                logger.error(logData,`app.controller.listUsers: Error`, error)
-                return Promise.resolve(error.toApiGatewayProxyResult())
-            })
+            const diffTime = process.hrtime(startTime)
+            const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
+            logger.info(logData,`app.controller.listUsers: Finished in ${processedDiffTime} ms`, response.status_code)
+            logger.debug(logData,'app.controller.listUsers', response)
+            return Promise.resolve(response.toApiGatewayProxyResult())
+        }
+        catch (err:unknown) {
+            const error:CommonResponse = <CommonResponse> err
+            logger.error(logData,`app.controller.listUsers: Error`, error)
+            return Promise.resolve(error.toApiGatewayProxyResult())
+        }
     }
 
-    public static userDetail(event: AWSLambda.APIGatewayEvent, logData: LogData): Promise<AWSLambda.APIGatewayProxyResult> {
+    public static async userDetail(event: AWSLambda.APIGatewayEvent, logData: LogData): Promise<AWSLambda.APIGatewayProxyResult> {
         const startTime = process.hrtime()
         // @ts-ignore. Ignored because event.pathParameters are already sanitized with schema in app/schemas/userDetail.json
         logger.info(logData, `app.controller.userDetail: Request received for User ${event.pathParameters.id}`)
-        // @ts-ignore
-        return this._userDetail(event.pathParameters.id, logData)
-            .then((user: User) => {
-                const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
-                response.setData(user)
+        try {
+            // @ts-ignore. Ignored because event.pathParameters are already sanitized with schema in app/schemas/userDetail.json
+            const user:User = await this._userDetail(event.pathParameters.id, logData)
+            const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
+            response.setData(user)
 
-                const diffTime = process.hrtime(startTime);
-                const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6);
-                logger.info(logData,`app.controller.userDetail: Finished in ${processedDiffTime} ms`, response.status_code);
-                logger.debug(logData,'app.controller.userDetail', response);
-                return Promise.resolve(response.toApiGatewayProxyResult())
-            })
-            .catch((error:CommonResponse) => {
-                logger.error(logData,`app.controller.userDetail: Error`, error)
-                return Promise.resolve(error.toApiGatewayProxyResult())
-            })
+            const diffTime = process.hrtime(startTime)
+            const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
+            logger.info(logData,`app.controller.userDetail: Finished in ${processedDiffTime} ms`, response.status_code)
+            logger.debug(logData,'app.controller.userDetail', response)
+
+            return Promise.resolve(response.toApiGatewayProxyResult())
+        }
+        catch (err:unknown) {
+            const error:CommonResponse = <CommonResponse> err
+            logger.error(logData,`app.controller.userDetail: Error`, error)
+            return Promise.resolve(error.toApiGatewayProxyResult())
+        }
     }
 
-    public static deleteUser(event: AWSLambda.APIGatewayEvent, logData: LogData): Promise<AWSLambda.APIGatewayProxyResult> {
+    public static async deleteUser(event: AWSLambda.APIGatewayEvent, logData: LogData): Promise<AWSLambda.APIGatewayProxyResult> {
         const startTime = process.hrtime()
         // @ts-ignore. Ignored because event.pathParameters are already sanitized with schema in app/schemas/userDetail.json
         logger.info(logData, `app.controller.deleteUser: Request received for User ${event.pathParameters.id}`)
-        // @ts-ignore. Ignored because event.pathParameters are already sanitized with schema in app/schemas/userDetail.json
-        return this._deleteUser(event.pathParameters.id, logData)
-            .then(() => {
-                const response: AWSLambda.APIGatewayProxyResult = {
-                    statusCode: 204,
-                    body: ''
-                }
-                const diffTime = process.hrtime(startTime);
-                const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6);
-                logger.info(logData,`app.controller.userDetail: Finished in ${processedDiffTime} ms`, response.statusCode);
-                logger.debug(logData,'app.controller.userDetail', response);
-                return Promise.resolve(response)
-            })
-            .catch((error:CommonResponse) => {
-                logger.error(logData,`app.controller.userDetail: Error`, error)
-                return Promise.resolve(error.toApiGatewayProxyResult())
-            })
+        try {
+            // @ts-ignore. Ignored because event.pathParameters are already sanitized with schema in app/schemas/userDetail.json
+            await this._deleteUser(event.pathParameters.id, logData)
+            const response: AWSLambda.APIGatewayProxyResult = {
+                statusCode: 204,
+                body: ''
+            }
+
+            const diffTime = process.hrtime(startTime)
+            const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
+            logger.info(logData,`app.controller.userDetail: Finished in ${processedDiffTime} ms`, response.statusCode)
+            logger.debug(logData,'app.controller.userDetail', response)
+
+            return Promise.resolve(response)
+        }
+        catch (err:unknown) {
+            const error:CommonResponse = <CommonResponse> err
+            logger.error(logData,`app.controller.deleteUser: Error`, error)
+            return Promise.resolve(error.toApiGatewayProxyResult())
+        }
     }
 
-    public static updateUser(event: AWSLambda.APIGatewayEvent, logData: LogData): Promise<AWSLambda.APIGatewayProxyResult> {
+    public static async updateUser(event: AWSLambda.APIGatewayEvent, logData: LogData): Promise<AWSLambda.APIGatewayProxyResult> {
         const startTime = process.hrtime()
         // @ts-ignore. Ignored because event.pathParameters are already sanitized with schema in app/schemas/userDetail.json
         logger.info(logData, `app.controller.deleteUser: Request received for User ${event.pathParameters.id}`)
         logger.debug(logData, `app.controller.updateUser: Body ${event.body}`)
-        // @ts-ignore
-        return this._userDetail(event.pathParameters.id, logData)
-            .then((user: User) => {
-                // @ts-ignore has been sanitized with middy, so it is not null
-                user.given_name = (event.body.given_name) ? event.body.given_name : user.given_name
-                // @ts-ignore
-                user.family_name = (event.body.family_name) ? event.body.family_name : user.family_name
-                // @ts-ignore
-                user.email = (event.body.email) ? event.body.email : user.email
-                // @ts-ignore
-                user.birthdate = (event.body.birthdate === null ) ? undefined : ((event.body.birthdate ) ? event.body.birthdate : user.birthdate)
-                // @ts-ignore
-                user.phone_number = (event.body.phone_number === null ) ? undefined : ((event.body.phone_number ) ? event.body.phone_number : user.phone_number)
-                return this._insertOrUpdateDB(user, logData)
-            })
-            .then((user: User) => {
-                const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
-                response.setData(user)
 
-                const diffTime = process.hrtime(startTime);
-                const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6);
-                logger.info(logData,`app.controller.updateUser: Finished in ${processedDiffTime} ms`, response.status_code);
-                logger.debug(logData,'app.controller.updateUser', response);
+        try {
+            // @ts-ignore
+            const user:User = await this._userDetail(event.pathParameters.id, logData)
+            // @ts-ignore has been sanitized with middy, so it is not null
+            user.given_name = (event.body.given_name) ? event.body.given_name : user.given_name
+            // @ts-ignore
+            user.family_name = (event.body.family_name) ? event.body.family_name : user.family_name
+            // @ts-ignore
+            user.email = (event.body.email) ? event.body.email : user.email
+            // @ts-ignore
+            user.birthdate = (event.body.birthdate === null ) ? undefined : ((event.body.birthdate ) ? event.body.birthdate : user.birthdate)
+            // @ts-ignore
+            user.phone_number = (event.body.phone_number === null ) ? undefined : ((event.body.phone_number ) ? event.body.phone_number : user.phone_number)
 
-                return Promise.resolve(response.toApiGatewayProxyResult())
-            })
-            .catch((error:CommonResponse) => {
-                logger.error(logData,`app.controller.userDetail: Error`, error)
-                return Promise.resolve(error.toApiGatewayProxyResult())
-            })
+            await this._insertOrUpdateDB(user, logData)
+
+            const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
+            response.setData(user)
+
+            const diffTime = process.hrtime(startTime)
+            const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
+            logger.info(logData,`app.controller.updateUser: Finished in ${processedDiffTime} ms`, response.status_code)
+            logger.debug(logData,'app.controller.updateUser', response)
+
+            return Promise.resolve(response.toApiGatewayProxyResult())
+        }
+        catch (err:unknown) {
+            const error:CommonResponse = <CommonResponse> err
+            logger.error(logData,`app.controller.updateUser: Error`, error)
+            return Promise.resolve(error.toApiGatewayProxyResult())
+        }
     }
-
-
 }
