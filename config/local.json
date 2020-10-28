@@ -1,5 +1,5 @@
 {
-    "name": "ts:skeleton",
+    "name": "ts-lambda-skeleton",
     "host": "localhost",
     "environment": "local",
     "aws": {

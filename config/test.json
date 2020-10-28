@@ -1,5 +1,5 @@
 {
-    "name": "covault:cin:tpw-binding-test",
+    "name": "ts-lambda-skeleton-test",
     "host": "nameOfLambdaFunction",
     "environment": "test",
     "aws": {
