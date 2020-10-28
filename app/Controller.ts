@@ -153,6 +153,13 @@ export default class Controller {
         })
     }
 
+    private static _printResponseLog(startTime: [number,number], method: string, response:CommonResponse, logData:LogData):void {
+        const diffTime = process.hrtime(startTime)
+        const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
+        logger.info(logData, `app.controller.${method}: Finished in ${processedDiffTime} ms`, response.status_code)
+        logger.debug(logData, 'app.controller.${method}', response)
+    }
+
 //********************************************************************************************************************//
 //************************************************* EXPORTS **********************************************************//
 //********************************************************************************************************************//
@@ -171,10 +178,7 @@ export default class Controller {
                 id: user.id
             })
 
-            const diffTime = process.hrtime(startTime)
-            const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
-            logger.info(logData, `app.controller.createUser: Finished in ${processedDiffTime} ms`, response.status_code)
-            logger.debug(logData, 'app.controller.createUser', response)
+            this._printResponseLog(startTime, 'createUser', response, logData)
 
             return Promise.resolve(response.toApiGatewayProxyResult())
         }
@@ -193,10 +197,8 @@ export default class Controller {
             const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
             response.setData(users)
 
-            const diffTime = process.hrtime(startTime)
-            const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
-            logger.info(logData,`app.controller.listUsers: Finished in ${processedDiffTime} ms`, response.status_code)
-            logger.debug(logData,'app.controller.listUsers', response)
+            this._printResponseLog(startTime, 'listUsers', response, logData)
+
             return Promise.resolve(response.toApiGatewayProxyResult())
         }
         catch (err:unknown) {
@@ -216,10 +218,7 @@ export default class Controller {
             const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
             response.setData(user)
 
-            const diffTime = process.hrtime(startTime)
-            const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
-            logger.info(logData,`app.controller.userDetail: Finished in ${processedDiffTime} ms`, response.status_code)
-            logger.debug(logData,'app.controller.userDetail', response)
+            this._printResponseLog(startTime, 'userDetail', response, logData)
 
             return Promise.resolve(response.toApiGatewayProxyResult())
         }
@@ -237,17 +236,11 @@ export default class Controller {
         try {
             // @ts-ignore. Ignored because event.pathParameters are already sanitized with schema in app/schemas/userDetail.json
             await this._deleteUser(event.pathParameters.id, logData)
-            const response: AWSLambda.APIGatewayProxyResult = {
-                statusCode: 204,
-                body: ''
-            }
+            const response:CommonResponse = new CommonResponse(EnumResponses.OK_NO_CONTENT)
 
-            const diffTime = process.hrtime(startTime)
-            const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
-            logger.info(logData,`app.controller.userDetail: Finished in ${processedDiffTime} ms`, response.statusCode)
-            logger.debug(logData,'app.controller.userDetail', response)
+            this._printResponseLog(startTime, 'deleteUser', response, logData)
 
-            return Promise.resolve(response)
+            return Promise.resolve(response.toApiGatewayProxyResult())
         }
         catch (err:unknown) {
             const error:CommonResponse = <CommonResponse> err
@@ -281,10 +274,7 @@ export default class Controller {
             const response = new CommonResponse(EnumResponses.OK_GENERIC_RESPONSE)
             response.setData(user)
 
-            const diffTime = process.hrtime(startTime)
-            const processedDiffTime = Math.round((diffTime[0] * 1e9 + diffTime[1]) / 1e6)
-            logger.info(logData,`app.controller.updateUser: Finished in ${processedDiffTime} ms`, response.status_code)
-            logger.debug(logData,'app.controller.updateUser', response)
+            this._printResponseLog(startTime, 'updateUser', response, logData)
 
             return Promise.resolve(response.toApiGatewayProxyResult())
         }

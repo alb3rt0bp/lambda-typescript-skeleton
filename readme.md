@@ -18,6 +18,7 @@
 - [Testing](#testing)
     - [Run unit tests](#run-unit-tests)
     - [Run sonar](#run-sonar)
+- [NPM commands](#npm-commands)
 - [Example of *Event* object](#example-of-Event-object)
    
   
@@ -133,6 +134,11 @@ Sonar is used here from a Docker Image, if you already have a sonar installation
 * Run ```$> npm run sonar```
 * Go to http://localhost:19000 to see results
 
+## NPM Commands
+
+* ``$> npm test``: Run unit tests with coverage
+* ``$> npm run sonar``: Run sonar client against a local Sonarqube server
+* ``$> npm run compile``: Compiles Typwscript files into **dist/** folder. Note: **node_modules** must be generated either manually or using a Lambda layer
 
 ## Example of *Event* object
 

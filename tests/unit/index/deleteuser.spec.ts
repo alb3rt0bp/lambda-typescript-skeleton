@@ -176,7 +176,7 @@ describe('Index tests and input validations for deleteUser service', () => {
         spyOn(Controller, 'deleteUser').and.callFake((event:AWSLambda.APIGatewayEvent, logData:LogData) => {
             return Promise.resolve({
                 statusCode: 204,
-                body: ''
+                body: '{"description":"No Content","internal_code":"GMB-0014"}'
             })
         });
 
@@ -184,7 +184,7 @@ describe('Index tests and input validations for deleteUser service', () => {
             const result =  await component.deleteUser(eventDummy, {} as AWSLambda.Context, null as unknown as AWSLambda.Callback);
             expect(result).toEqual({
                 statusCode: 204,
-                body: '',
+                body: '{"description":"No Content","internal_code":"GMB-0014"}',
                 headers: {
                     'Access-Control-Allow-Origin': '*'
                 }

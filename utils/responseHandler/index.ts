@@ -4,9 +4,9 @@ import {APIGatewayProxyResult} from "aws-lambda"
 import {EnumResponses} from './EnumResponses'
 
 interface CommonResponseBody {
-    description: String
-    internal_code: String
-    data?:Object|undefined
+    description:string
+    internal_code:string
+    data?:Object
 }
 
 export default class CommonResponse {
@@ -24,10 +24,10 @@ export default class CommonResponse {
         this._body.data = data
     }
 
-    getDescription():String {
+    getDescription():string {
         return this._body.description
     }
-    setDescription(description:String) {
+    setDescription(description:string) {
         this._body.description = description
     }
 

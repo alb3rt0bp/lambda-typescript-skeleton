@@ -1,4 +1,4 @@
-import CommonResponse from '../responseHandler';
+import CommonResponse from '../responseHandler'
 import { EnumResponses } from '../responseHandler/EnumResponses'
 
 export function schemaValidationErrorParser(): any {

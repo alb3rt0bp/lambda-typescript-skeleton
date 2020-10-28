@@ -8,7 +8,8 @@
     "test:unit": "node_modules/.bin/cross-env NODE_ENV=test ./node_modules/.bin/jasmine-ts --config=jasmine.json",
     "test:coverage": "node_modules/.bin/nyc --check-coverage false --silent npm run test:unit",
     "coverage:report": "node_modules/.bin/nyc report",
-    "sonar": "ts-node sonarRunner.ts"
+    "sonar": "ts-node sonarRunner.ts",
+    "compile": "rm -rf dist/ && node_modules/.bin/tsc && cp package.json dist/"
   },
   "repository": {
     "type": "git",

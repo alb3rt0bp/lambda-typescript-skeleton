@@ -98,7 +98,7 @@ describe('Controller tests for Controller.deleteUser service', () => {
             AWSMock.restore('DynamoDB')
             expect(result).toEqual({
                 statusCode: 204,
-                body: ''
+                body: '{"description":"No Content","internal_code":"GMB-0014"}'
             })
             done();
         }

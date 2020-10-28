@@ -7,7 +7,7 @@ scanner(
             "sonar.projectKey": "sonar:ts-lambda-skeleton",
             "sonar.projectName": " ts-lambda-skeleton",
             "sonar.projectVersion": "1.0.0",
-            "sonar.sources": "./index.ts,./app/",
+            "sonar.sources": "./index.ts,./app/,./utils",
             "sonar.exclusions": "",
             "sonar.language": "ts",
             "sonar.sourceEncoding": "UTF-8",

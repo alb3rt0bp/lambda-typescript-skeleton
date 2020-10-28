@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
-        "target": "ES2020",
+        "target": "es6",
         "watch": false,
-        "outFile": "dist/bundle.js",
-        "rootDirs": ["./app", "./config", "./utils"],
+        "outDir": "dist/",
+        "rootDirs": ["./app", "./config", "./utils", "./models"],
         "allowJs": true,
         "lib": ["es2015","dom"],
         "module": "commonjs",
@@ -13,11 +13,22 @@
         "esModuleInterop": true,
         "strict": true,
         "forceConsistentCasingInFileNames": true
+        //"declaration": true
     },
+    "include": [
+        "**/*.ts",
+        "**/*.json"
+    ],
     "exclude": [
         "tests",
         "dist",
         "gulpfile.ts",
-        "node_modules"
+        "node_modules",
+        "sonarRunner.ts",
+        "jasmine.json",
+        "tsconfig.json",
+        "tsconfig.reference.json",
+        "package-lock.json",
+        "package.json"
     ]
 }
