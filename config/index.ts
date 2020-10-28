@@ -7,14 +7,17 @@ if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'local') {
 }
 else {
     cnf = {
-        name: process.env.TS_SKELETON_IDCONNECT_NAME,
-        logLevel: process.env.TS_SKELETON_LOGLEVEL,
+        name: process.env.TS_SKELETON_NAME,
+        host: process.env.TS_SKELETON_HOST,
         environment: process.env.TS_SKELETON_ENVIRONMENT,
         aws: {
             region: process.env.TS_SKELETON_AWS_REGION,
             dynamodb: {
-                tableName: process.env.TS_SKELETONT_AWS_DYNAMODB_TABLENAME
+                tableName: process.env.TS_SKELETON_AWS_DYNAMODB_TABLENAME
             }
+        },
+        log: {
+            level: process.env.TS_SKELETON_LOG_LEVEL
         }
     }
 }

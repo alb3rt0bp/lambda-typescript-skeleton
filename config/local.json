@@ -1,11 +1,14 @@
 {
     "name": "ts:skeleton",
-    "logLevel": "debug",
+    "host": "localhost",
     "environment": "local",
     "aws": {
         "region": "eu-west-1",
         "dynamodb": {
             "tableName": "dynamo_test_ts_skeleton"
         }
+    },
+    "log": {
+        "level": "debug"
     }
 }

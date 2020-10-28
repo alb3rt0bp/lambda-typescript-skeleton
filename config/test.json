@@ -1,11 +1,14 @@
 {
     "name": "covault:cin:tpw-binding-test",
-    "logLevel": "none",
+    "host": "nameOfLambdaFunction",
     "environment": "test",
     "aws": {
         "region": "us-east-1",
         "dynamodb": {
             "tableName": "test-alberto-ts"
         }
+    },
+    "log": {
+        "level": "none"
     }
 }

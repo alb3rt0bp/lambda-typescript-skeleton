@@ -1,21 +1,19 @@
 import * as winston from 'winston'
-import * as fs from 'fs'
+import {config} from '../../config'
 import * as util from 'util'
 import { LogData } from './classes/LogData'
 const { printf } = winston.format
 
-let hostname        = ""
-let applicationName = ""
+let hostname        = config.host
+let applicationName = config.name
 const consoleLog = 'console'
-const fileLog = 'fileLog'
+//const fileLog = 'fileLog'
 
 const w:any = {}
 
-const covaultCustomFormat = printf(({ level, message}:any) => {
+const customFormat = printf(({ level, message}:any) => {
     return `${level}: ${message}`
 })
-
-export { silly, debug, info, error, warn }
 
 //********************************************************************************************************************//
 //******************************************* TRANSPORTS MANAGEMENT **************************************************//
@@ -37,11 +35,11 @@ const addConsoleTransport = (level: string) => {
     w[consoleLog].add(new winston.transports.Console({
         level: level,
         silent: false,
-        format: covaultCustomFormat
+        format: customFormat
     }))
 }
 
-const addFileTransport = (conf:any) => {
+/*const addFileTransport = (conf:any) => {
     w[fileLog] = winston.createLogger({
         levels: {
             error: 0,
@@ -68,7 +66,7 @@ const createLogPath = (logPath:string) => {
         fs.mkdirSync(logPath)
     }
     return logPath
-}
+}*/
 
 /**
  * Finds if given transport name is already created
@@ -100,7 +98,7 @@ const findTransportByName = (transportName:string) => {
  * @param {object} additionalConfig.cloudWatch.logStreamName - Specifies the name of AWS CloudWatch Log Stream withing Log Group
  * @returns {*}
  */
-const init = (host:string, appName:string, logLevel:string, additionalConfig:any): void => {
+/*const init = (host:string, appName:string, logLevel:string, additionalConfig:any): void => {
     hostname = host
     applicationName = appName
     if(!findTransportByName(consoleLog)) {
@@ -111,6 +109,10 @@ const init = (host:string, appName:string, logLevel:string, additionalConfig:any
         const logPath = createLogPath(additionalConfig.file.path)
         addFileTransport({level: logLevel, filename: `${logPath}/${additionalConfig.file.name}`})
     }
+}*/
+
+if(!findTransportByName(consoleLog)) {
+    addConsoleTransport(config.log.level)
 }
 
 //********************************************************************************************************************//
@@ -179,10 +181,4 @@ const logFunc = (level:string, generalData:LogData, desc:string, extra?:any) => 
 //***************************************************** EXPORTS ******************************************************//
 //********************************************************************************************************************//
 
-exports.init      = init
-
-exports.error    = error
-exports.warn     = warn
-exports.info     = info
-exports.debug    = debug
-exports.silly    = silly
+export { silly, debug, info, error, warn }

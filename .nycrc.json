@@ -14,7 +14,8 @@
     "coverage/**",
     "node_modules/**",
     "**/*.d.ts",
-    "tests/**"
+    "tests/**",
+    "utils/log/index.ts"
   ],
   "sourceMap": true,
   "reporter": [
