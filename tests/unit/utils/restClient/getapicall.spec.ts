@@ -1,11 +1,11 @@
 'use strict';
-import { delApiCall, externalResponse } from '../../../../utils/restClient'
+import { getApiCall, externalResponse } from '../../../../utils/restClient'
 import axios, {AxiosRequestConfig} from 'axios'
 import {LogData} from "../../../../utils/log/classes/LogData"
 import CommonResponse from "../../../../utils/responseHandler";
 import {EnumResponses} from "../../../../utils/responseHandler/EnumResponses";
 
-describe('Delete API Call', function () {
+describe('Get API Call', function () {
     let logData: LogData;
 
     beforeEach(function () {
@@ -22,7 +22,7 @@ describe('Delete API Call', function () {
 
     it('KO, Unexpected Error calling service', function (done) {
 
-        spyOn(axios,'delete').and.callFake(function(url:string, config: AxiosRequestConfig | undefined): Promise<any>{
+        spyOn(axios,'get').and.callFake(function(url:string, config: AxiosRequestConfig | undefined): Promise<any>{
             expect(url).toBe("")
             expect(config).toEqual({
                 params: '',
@@ -35,7 +35,7 @@ describe('Delete API Call', function () {
             return Promise.reject({hola: "hola"})
         })
 
-        let result = delApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
+        let result = getApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
 
         result.then((data:externalResponse) => {
             expect(data).not.toBeDefined();
@@ -50,7 +50,7 @@ describe('Delete API Call', function () {
 
     it('KO, No response from Server', function (done) {
 
-        spyOn(axios,'delete').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
+        spyOn(axios,'get').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
             expect(url).toBe("")
             expect(config).toEqual({
                 params: '',
@@ -63,7 +63,7 @@ describe('Delete API Call', function () {
             return Promise.reject({hola: "hola", request: {}})
         })
 
-        let result = delApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
+        let result = getApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
 
         result.then((data:externalResponse) => {
             expect(data).not.toBeDefined();
@@ -77,7 +77,7 @@ describe('Delete API Call', function () {
 
     it('OK, Server answered with with error', function (done) {
 
-        spyOn(axios,'delete').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
+        spyOn(axios,'get').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
             expect(url).toBe("")
             expect(config).toEqual({
                 params: '',
@@ -95,7 +95,7 @@ describe('Delete API Call', function () {
             })
         })
 
-        let result = delApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
+        let result = getApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
 
         result.then((data:externalResponse) => {
             expect(data).toBeDefined()
@@ -112,7 +112,7 @@ describe('Delete API Call', function () {
 
     it('OK', function (done) {
 
-        spyOn(axios,'delete').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
+        spyOn(axios,'get').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
             expect(url).toBe("")
             expect(config).toEqual({
                 params: '',
@@ -128,7 +128,7 @@ describe('Delete API Call', function () {
             })
         })
 
-        let result = delApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
+        let result = getApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
 
         result.then((data:externalResponse) => {
             expect(data).toBeDefined()
@@ -143,9 +143,48 @@ describe('Delete API Call', function () {
         });
     })
 
+    it('OK, having buffer body', function (done) {
+        const imgBuff = Buffer.from('asdfghj')
+
+        spyOn(axios,'get').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
+            expect(url).toBe("")
+            expect(config).toEqual({
+                params: '',
+                headers: {
+                    'x-unique-transactionid': jasmine.any(String),
+                    'content-type': "application/x-www-form-urlencoded"
+                }
+            })
+
+            return Promise.resolve({
+                status: 200,
+                data: imgBuff,
+                headers: {'content-type': 'image/png', 'content-disposition': 'asdfg.png'}
+            })
+        })
+
+        let result = getApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
+
+        result.then((data:externalResponse) => {
+            expect(data).toBeDefined()
+            expect(data).toEqual({
+                statusCode: 200,
+                body: imgBuff,
+                headers: {
+                    'content-type': 'image/png',
+                    'content-disposition': 'asdfg.png'
+                }
+            })
+            done();
+        }).catch((error:CommonResponse) => {
+            expect(error).not.toBeDefined()
+            done();
+        });
+    })
+
     it('OK with no headers', function (done) {
 
-        spyOn(axios,'delete').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
+        spyOn(axios,'get').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
             expect(url).toBe("")
             expect(config).toEqual({
                 params: '',
@@ -158,7 +197,7 @@ describe('Delete API Call', function () {
             })
         })
 
-        let result = delApiCall("", {}, undefined, logData);
+        let result = getApiCall("", {}, undefined, logData);
 
         result.then((data:externalResponse) => {
             expect(data).toBeDefined()

@@ -1,20 +1,25 @@
-'use strict';
-import { delApiCall, externalResponse } from '../../../../utils/restClient'
+'use strict'
+import { putFormDataApiCall, externalResponse } from '../../../../utils/restClient'
 import axios, {AxiosRequestConfig} from 'axios'
 import {LogData} from "../../../../utils/log/classes/LogData"
-import CommonResponse from "../../../../utils/responseHandler";
-import {EnumResponses} from "../../../../utils/responseHandler/EnumResponses";
+import CommonResponse from "../../../../utils/responseHandler"
+import {EnumResponses} from "../../../../utils/responseHandler/EnumResponses"
+import FormData from 'form-data'
 
-describe('Delete API Call', function () {
-    let logData: LogData;
+describe('Put FormData API Call', function () {
+    let logData: LogData,
+        formData: FormData
 
     beforeEach(function () {
+        formData = new FormData()
+        formData.append('hellow', 'World!')
         logData = new LogData({
             method: '',
             path: '',
             from: ''
         })
-    });
+
+    })
 
     //**********************************************************************************************************//
     //***************************************** EXTERNAL FUNCTIONS *********************************************//
@@ -22,68 +27,66 @@ describe('Delete API Call', function () {
 
     it('KO, Unexpected Error calling service', function (done) {
 
-        spyOn(axios,'delete').and.callFake(function(url:string, config: AxiosRequestConfig | undefined): Promise<any>{
+        spyOn(axios,'put').and.callFake(function(url:string, form: FormData, config: AxiosRequestConfig | undefined): Promise<any>{
             expect(url).toBe("")
             expect(config).toEqual({
-                params: '',
                 headers: {
                     'x-unique-transactionid': jasmine.any(String),
-                    'content-type': "application/x-www-form-urlencoded"
+                    'x-this-is': "a test"
                 }
             })
+            expect(formData).toEqual(formData)
 
             return Promise.reject({hola: "hola"})
         })
 
-        let result = delApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
+        let result = putFormDataApiCall("", formData, {'x-this-is': "a test"}, logData)
 
         result.then((data:externalResponse) => {
-            expect(data).not.toBeDefined();
-            done();
+            expect(data).not.toBeDefined()
+            done()
         }).catch((error:CommonResponse) => {
 
-            expect(error).toBeDefined();
+            expect(error).toBeDefined()
             expect(error).toEqual(new CommonResponse(EnumResponses.GENERAL_ERROR))
-            done();
-        });
+            done()
+        })
     })
 
     it('KO, No response from Server', function (done) {
 
-        spyOn(axios,'delete').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
+        spyOn(axios,'put').and.callFake(function(url:string, form: FormData, config: AxiosRequestConfig | undefined): Promise<any> {
             expect(url).toBe("")
             expect(config).toEqual({
-                params: '',
                 headers: {
                     'x-unique-transactionid': jasmine.any(String),
-                    'content-type': "application/x-www-form-urlencoded"
+                    'x-this-is': "a test"
                 }
             })
 
             return Promise.reject({hola: "hola", request: {}})
         })
 
-        let result = delApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
+        let result = putFormDataApiCall("", formData, {'x-this-is': "a test"}, logData)
 
         result.then((data:externalResponse) => {
-            expect(data).not.toBeDefined();
-            done();
+            expect(data).not.toBeDefined()
+            done()
         }).catch((error:CommonResponse) => {
-            expect(error).toBeDefined();
+            expect(error).toBeDefined()
             expect(error).toEqual(new CommonResponse(EnumResponses.GENERAL_ERROR))
-            done();
-        });
+            done()
+        })
     })
 
     it('OK, Server answered with with error', function (done) {
 
-        spyOn(axios,'delete').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
+        spyOn(axios,'put').and.callFake(function(url:string, form: FormData, config: AxiosRequestConfig | undefined): Promise<any> {
             expect(url).toBe("")
             expect(config).toEqual({
-                params: '',
                 headers: {
                     'x-unique-transactionid': jasmine.any(String),
-                    'content-type': "application/x-www-form-urlencoded"
+                    'x-this-is': "a test"
                 }
             })
 
@@ -95,7 +98,7 @@ describe('Delete API Call', function () {
             })
         })
 
-        let result = delApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
+        let result = putFormDataApiCall("", formData, {'x-this-is': "a test"}, logData)
 
         result.then((data:externalResponse) => {
             expect(data).toBeDefined()
@@ -103,22 +106,21 @@ describe('Delete API Call', function () {
                 statusCode: 500,
                 body: {error: "this is an error"}
             })
-            done();
+            done()
         }).catch((error:CommonResponse) => {
             expect(error).not.toBeDefined()
-            done();
-        });
+            done()
+        })
     })
 
     it('OK', function (done) {
 
-        spyOn(axios,'delete').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
+        spyOn(axios,'put').and.callFake(function(url:string, form: FormData, config: AxiosRequestConfig | undefined): Promise<any> {
             expect(url).toBe("")
             expect(config).toEqual({
-                params: '',
                 headers: {
                     'x-unique-transactionid': jasmine.any(String),
-                    'content-type': "application/x-www-form-urlencoded"
+                    'x-this-is': "a test"
                 }
             })
 
@@ -128,7 +130,7 @@ describe('Delete API Call', function () {
             })
         })
 
-        let result = delApiCall("", {}, {'content-type': "application/x-www-form-urlencoded"}, logData);
+        let result = putFormDataApiCall("", formData, {'x-this-is': "a test"}, logData)
 
         result.then((data:externalResponse) => {
             expect(data).toBeDefined()
@@ -136,20 +138,21 @@ describe('Delete API Call', function () {
                 statusCode: 200,
                 body: {hello: "World"}
             })
-            done();
+            done()
         }).catch((error:CommonResponse) => {
             expect(error).not.toBeDefined()
-            done();
-        });
+            done()
+        })
     })
 
     it('OK with no headers', function (done) {
 
-        spyOn(axios,'delete').and.callFake(function(url:string, config?: AxiosRequestConfig | undefined): Promise<any>{
+        spyOn(axios,'put').and.callFake(function(url:string, form: FormData, config: AxiosRequestConfig | undefined): Promise<any> {
             expect(url).toBe("")
             expect(config).toEqual({
-                params: '',
-                headers: {'x-unique-transactionid': jasmine.any(String)}
+                headers: {
+                    'x-unique-transactionid': jasmine.any(String)
+                }
             })
 
             return Promise.resolve({
@@ -158,7 +161,7 @@ describe('Delete API Call', function () {
             })
         })
 
-        let result = delApiCall("", {}, undefined, logData);
+        let result = putFormDataApiCall("", formData, undefined, logData)
 
         result.then((data:externalResponse) => {
             expect(data).toBeDefined()
@@ -166,10 +169,10 @@ describe('Delete API Call', function () {
                 statusCode: 200,
                 body: {hello: "World"}
             })
-            done();
+            done()
         }).catch((error:CommonResponse) => {
             expect(error).not.toBeDefined()
-            done();
-        });
+            done()
+        })
     })
-});
+})

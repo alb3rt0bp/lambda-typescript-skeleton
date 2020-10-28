@@ -7,6 +7,7 @@
   ],
   "include": [
     "app/**/*.ts",
+    "utils/restClient/*.ts",
     "index.ts"
   ],
   "exclude": [

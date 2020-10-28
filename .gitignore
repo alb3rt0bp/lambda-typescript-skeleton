@@ -49,3 +49,4 @@ documentation/
 .editorconfig
 package-lock.json
 doc/api.html
+dist/
