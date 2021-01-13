@@ -1,3 +1,9 @@
+dynamodb-local:
+  image: amazon/dynamodb-local
+  container_name: dynamodb-local
+  ports:
+    - "8000:8000"
+
 sonar-database:
   image: postgres:13.0-alpine
   container_name: sonar-database
